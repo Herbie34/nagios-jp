@@ -89,21 +89,21 @@ static void print_expand_input(int type) {
 
 	if(type == DISPLAY_COMMAND_EXPANSION) return;	/* Has its own form, w/ larger <input> */
 	else if(type == DISPLAY_SERVICES) {
-		seldesc = " Services Named or on Host";
+		seldesc = "ホスト上または指定されたサービスのみ";
 		}
 	else if(type == DISPLAY_SERVICEDEPENDENCIES) {
-		seldesc = " Dependencies with Host";
+		seldesc = "ホストとの依存関係のみ";
 		}
 	else if(type == DISPLAY_SERVICEESCALATIONS) {
-		seldesc = " Escalations on Host";
+		seldesc = "ホスト上のエスカレーションのみ";
 		}
 	else if(type == DISPLAY_HOSTDEPENDENCIES) {
-		seldesc = " Dependencies on/of Host";
+		seldesc = "ホスト上の依存関係のみ";
 		}
 	else if(type == DISPLAY_HOSTESCALATIONS) {
-		seldesc = " Escalations for Host";
+		seldesc = "ホスト用のエスカレーションのみ";
 		}
-	printf("<tr><td align=left class='reportSelectSubTitle'>Show Only%s:</td></tr>\n", seldesc);
+	printf("<tr><td align=left class='reportSelectSubTitle'>%s表示:</td></tr>\n", seldesc);
 	printf("<tr><td align=left class='reportSelectItem'><input type='text' name='expand'\n");
 	printf("value='%s'>", html_encode(to_expand, FALSE));
 	}
@@ -133,7 +133,7 @@ int main(void) {
 
 	/* left column of the first row */
 	printf("<td align=left valign=top width=50%%>\n");
-	display_info_table("Configuration", FALSE, &current_authdata);
+	display_info_table("各種設定 -Configuration-", FALSE, &current_authdata);
 	printf("</td>\n");
 
 	/* right hand column of top row */
@@ -144,28 +144,28 @@ int main(void) {
 		printf("<form method=\"get\" action=\"%s\">\n", CONFIG_CGI);
 		printf("<table border=0>\n");
 
-		printf("<tr><td align=left class='reportSelectSubTitle'>Object Type:</td></tr>\n");
+		printf("<tr><td align=left class='reportSelectSubTitle'>オブジェクトタイプ:</td></tr>\n");
 		printf("<tr><td align=left class='reportSelectItem'>");
 		printf("<select name='type'>\n");
-		printf("<option value='hosts' %s>Hosts\n", (display_type == DISPLAY_HOSTS) ? "SELECTED" : "");
-		printf("<option value='hostdependencies' %s>Host Dependencies\n", (display_type == DISPLAY_HOSTDEPENDENCIES) ? "SELECTED" : "");
-		printf("<option value='hostescalations' %s>Host Escalations\n", (display_type == DISPLAY_HOSTESCALATIONS) ? "SELECTED" : "");
-		printf("<option value='hostgroups' %s>Host Groups\n", (display_type == DISPLAY_HOSTGROUPS) ? "SELECTED" : "");
-		printf("<option value='services' %s>Services\n", (display_type == DISPLAY_SERVICES) ? "SELECTED" : "");
-		printf("<option value='servicegroups' %s>Service Groups\n", (display_type == DISPLAY_SERVICEGROUPS) ? "SELECTED" : "");
-		printf("<option value='servicedependencies' %s>Service Dependencies\n", (display_type == DISPLAY_SERVICEDEPENDENCIES) ? "SELECTED" : "");
-		printf("<option value='serviceescalations' %s>Service Escalations\n", (display_type == DISPLAY_SERVICEESCALATIONS) ? "SELECTED" : "");
-		printf("<option value='contacts' %s>Contacts\n", (display_type == DISPLAY_CONTACTS) ? "SELECTED" : "");
-		printf("<option value='contactgroups' %s>Contact Groups\n", (display_type == DISPLAY_CONTACTGROUPS) ? "SELECTED" : "");
-		printf("<option value='timeperiods' %s>Timeperiods\n", (display_type == DISPLAY_TIMEPERIODS) ? "SELECTED" : "");
-		printf("<option value='commands' %s>Commands\n", (display_type == DISPLAY_COMMANDS) ? "SELECTED" : "");
-		printf("<option value='command' %s>Command Expansion\n", (display_type == DISPLAY_COMMAND_EXPANSION) ? "SELECTED" : "");
+		printf("<option value='hosts' %s>ホスト\n", (display_type == DISPLAY_HOSTS) ? "SELECTED" : "");
+		printf("<option value='hostdependencies' %s>ホスト依存関係\n", (display_type == DISPLAY_HOSTDEPENDENCIES) ? "SELECTED" : "");
+		printf("<option value='hostescalations' %s>ホストエスカレーション(上位伝達)\n", (display_type == DISPLAY_HOSTESCALATIONS) ? "SELECTED" : "");
+		printf("<option value='hostgroups' %s>ホストグループ\n", (display_type == DISPLAY_HOSTGROUPS) ? "SELECTED" : "");
+		printf("<option value='services' %s>サービス\n", (display_type == DISPLAY_SERVICES) ? "SELECTED" : "");
+		printf("<option value='servicegroups' %s>サービスグループ\n", (display_type == DISPLAY_SERVICEGROUPS) ? "SELECTED" : "");
+		printf("<option value='servicedependencies' %s>サービス依存関係\n", (display_type == DISPLAY_SERVICEDEPENDENCIES) ? "SELECTED" : "");
+		printf("<option value='serviceescalations' %s>サービスエスカレーション(上位伝達)\n", (display_type == DISPLAY_SERVICEESCALATIONS) ? "SELECTED" : "");
+		printf("<option value='contacts' %s>通知先\n", (display_type == DISPLAY_CONTACTS) ? "SELECTED" : "");
+		printf("<option value='contactgroups' %s>通知先グループ\n", (display_type == DISPLAY_CONTACTGROUPS) ? "SELECTED" : "");
+		printf("<option value='timeperiods' %s>時間帯\n", (display_type == DISPLAY_TIMEPERIODS) ? "SELECTED" : "");
+		printf("<option value='commands' %s>コマンド\n", (display_type == DISPLAY_COMMANDS) ? "SELECTED" : "");
+		printf("<option value='command' %s>拡張コマンド\n", (display_type == DISPLAY_COMMAND_EXPANSION) ? "SELECTED" : "");
 		printf("</select>\n");
 		printf("</td></tr>\n");
 
 		print_expand_input(display_type);
 
-		printf("<tr><td class='reportSelectItem'><input type='submit' value='Update'></td></tr>\n");
+		printf("<tr><td class='reportSelectItem'><input type='submit' value='更新'></td></tr>\n");
 		printf("</table>\n");
 		printf("</form>\n");
 		}
@@ -295,10 +295,11 @@ void document_header(int use_stylesheet) {
 
 	printf("<html>\n");
 	printf("<head>\n");
+	printf("<meta http-equiv='content-type' content='text/html;charset=UTF-8'>\n");
 	printf("<link rel=\"shortcut icon\" href=\"%sfavicon.ico\" type=\"image/ico\">\n", url_images_path);
 	printf("<META HTTP-EQUIV='Pragma' CONTENT='no-cache'>\n");
 	printf("<title>\n");
-	printf("Configuration\n");
+	printf("設定 -Configuration-\n");
 	printf("</title>\n");
 
 	if(use_stylesheet == TRUE) {
@@ -422,7 +423,7 @@ void display_hosts(void) {
 	char *processed_string = NULL;
 	int options = 0;
 	int odd = 0;
-	char time_string[16];
+	char time_string[24];
 	const char *bg_class = "";
 	int num_contacts = 0;
 
@@ -432,52 +433,52 @@ void display_hosts(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Host%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : " "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>ホスト %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P><DIV ALIGN=CENTER>\n");
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Host Name</TH>");
-	printf("<TH CLASS='data'>Alias/Description</TH>");
-	printf("<TH CLASS='data'>Address</TH>");
-	printf("<TH CLASS='data'>Importance (Host)</TH>");
-	printf("<TH CLASS='data'>Importance (Host + Services)</TH>");
-	printf("<TH CLASS='data'>Parent Hosts</TH>");
-	printf("<TH CLASS='data'>Max. Check Attempts</TH>");
-	printf("<TH CLASS='data'>Check Interval</TH>\n");
-	printf("<TH CLASS='data'>Retry Interval</TH>\n");
-	printf("<TH CLASS='data'>Host Check Command</TH>");
-	printf("<TH CLASS='data'>Check Period</TH>");
+	printf("<TH CLASS='data'>ホスト名</TH>");
+	printf("<TH CLASS='data'>エイリアス/説明</TH>");
+	printf("<TH CLASS='data'>アドレス</TH>");
+	printf("<TH CLASS='data'>重要度 (ホスト)</TH>");
+	printf("<TH CLASS='data'>重要度 (ホスト + サービス)</TH>");
+	printf("<TH CLASS='data'>上位ホスト</TH>");
+	printf("<TH CLASS='data'>最大チェック数</TH>");
+	printf("<TH CLASS='data'>チェック間隔</TH>\n");
+	printf("<TH CLASS='data'>再試行間隔</TH>\n");
+	printf("<TH CLASS='data'>ホストチェックコマンド</TH>");
+	printf("<TH CLASS='data'>チェック期間</TH>");
 	printf("<TH CLASS='data'>Obsess Over</TH>\n");
-	printf("<TH CLASS='data'>Enable Active Checks</TH>\n");
-	printf("<TH CLASS='data'>Enable Passive Checks</TH>\n");
-	printf("<TH CLASS='data'>Check Freshness</TH>\n");
-	printf("<TH CLASS='data'>Freshness Threshold</TH>\n");
-	printf("<TH CLASS='data'>Default Contacts/Groups</TH>\n");
-	printf("<TH CLASS='data'>Notification Interval</TH>");
-	printf("<TH CLASS='data'>First Notification Delay</TH>");
-	printf("<TH CLASS='data'>Notification Options</TH>");
-	printf("<TH CLASS='data'>Notification Period</TH>");
-	printf("<TH CLASS='data'>Event Handler</TH>");
-	printf("<TH CLASS='data'>Enable Event Handler</TH>");
-	printf("<TH CLASS='data'>Stalking Options</TH>\n");
-	printf("<TH CLASS='data'>Enable Flap Detection</TH>");
-	printf("<TH CLASS='data'>Low Flap Threshold</TH>");
-	printf("<TH CLASS='data'>High Flap Threshold</TH>");
-	printf("<TH CLASS='data'>Flap Detection Options</TH>\n");
-	printf("<TH CLASS='data'>Process Performance Data</TH>");
-	printf("<TH CLASS='data'>Notes</TH>");
-	printf("<TH CLASS='data'>Notes URL</TH>");
-	printf("<TH CLASS='data'>Action URL</TH>");
-	printf("<TH CLASS='data'>2-D Coords</TH>");
-	printf("<TH CLASS='data'>3-D Coords</TH>");
-	printf("<TH CLASS='data'>Statusmap Image</TH>");
-	printf("<TH CLASS='data'>VRML Image</TH>");
-	printf("<TH CLASS='data'>Logo Image</TH>");
-	printf("<TH CLASS='data'>Image Alt</TH>");
-	printf("<TH CLASS='data'>Retention Options</TH>");
+	printf("<TH CLASS='data'>アクティブチェック</TH>\n");
+	printf("<TH CLASS='data'>パッシブチェック</TH>\n");
+	printf("<TH CLASS='data'>鮮度チェック(Freshness)</TH>\n");
+	printf("<TH CLASS='data'>鮮度しきい値(Freshness)</TH>\n");
+	printf("<TH CLASS='data'>デフォルトの通知先/グループ</TH>\n");
+	printf("<TH CLASS='data'>通知間隔</TH>");
+	printf("<TH CLASS='data'>初回通知遅延時間</TH>");
+	printf("<TH CLASS='data'>通知オプション</TH>");
+	printf("<TH CLASS='data'>通知時間帯</TH>");
+	printf("<TH CLASS='data'>イベントハンドラ</TH>");
+	printf("<TH CLASS='data'>イベントハンドラの有効化</TH>");
+	printf("<TH CLASS='data'>追跡オプション</TH>\n");
+	printf("<TH CLASS='data'>フラップ検知設定</TH>");
+	printf("<TH CLASS='data'>低フラップ閾値</TH>");
+	printf("<TH CLASS='data'>高フラップ閾値</TH>");
+	printf("<TH CLASS='data'>フラップ検知オプション</TH>\n");
+	printf("<TH CLASS='data'>パフォーマンスデータ処理</TH>");
+	printf("<TH CLASS='data'>メモ</TH>");
+	printf("<TH CLASS='data'>メモURL</TH>");
+	printf("<TH CLASS='data'>アクションURL</TH>");
+	printf("<TH CLASS='data'>2-D 位置</TH>");
+	printf("<TH CLASS='data'>3-D 位置</TH>");
+	printf("<TH CLASS='data'>ステータスマップ画像</TH>");
+	printf("<TH CLASS='data'>VRML画像</TH>");
+	printf("<TH CLASS='data'>ロゴ画像</TH>");
+	printf("<TH CLASS='data'>画像代替文字</TH>");
+	printf("<TH CLASS='data'>ステータス保持オプション</TH>");
 	printf("</TR>\n");
 
 	/* check all the hosts... */
@@ -538,19 +539,19 @@ void display_hosts(void) {
 				printf("<A HREF='%s?type=timeperiods&expand=%s'>%s</A>", CONFIG_CGI, url_encode(temp_host->check_period), html_encode(temp_host->check_period, FALSE));
 			printf("</TD>\n");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->obsess == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->obsess == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->checks_enabled == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->checks_enabled == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->accept_passive_checks == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->accept_passive_checks == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->check_freshness == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->check_freshness == TRUE) ? "有効" : "無効");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			if(temp_host->freshness_threshold == 0)
-				printf("Auto-determined value\n");
+				printf("自動設定\n");
 			else
-				printf("%d seconds\n", temp_host->freshness_threshold);
+				printf("%d 秒\n", temp_host->freshness_threshold);
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
@@ -575,7 +576,7 @@ void display_hosts(void) {
 			printf("</TD>\n");
 
 			get_interval_time_string(temp_host->notification_interval, time_string, sizeof(time_string));
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->notification_interval == 0) ? "<i>No Re-notification</I>" : html_encode(time_string, FALSE));
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_host->notification_interval == 0) ? "<i>再通知無し</I>" : html_encode(time_string, FALSE));
 
 			get_interval_time_string(temp_host->first_notification_delay, time_string, sizeof(time_string));
 			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, time_string);
@@ -584,26 +585,26 @@ void display_hosts(void) {
 			options = 0;
 			if(flag_isset(temp_host->notification_options, OPT_DOWN) == TRUE) {
 				options = 1;
-				printf("Down");
+				printf("停止(DOWN)");
 				}
 			if(flag_isset(temp_host->notification_options, OPT_UNREACHABLE) == TRUE) {
-				printf("%sUnreachable", (options) ? ", " : "");
+				printf("%s未到達(UNREACHABLE)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_host->notification_options, OPT_RECOVERY) == TRUE) {
-				printf("%sRecovery", (options) ? ", " : "");
+				printf("%s復旧(RECOVERY)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_host->notification_options, OPT_FLAPPING) == TRUE) {
-				printf("%sFlapping", (options) ? ", " : "");
+				printf("%sフラッピング(FLAPPING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_host->notification_options, OPT_DOWNTIME) == TRUE) {
-				printf("%sDowntime", (options) ? ", " : "");
+				printf("%sダウンタイム", (options) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
@@ -622,41 +623,41 @@ void display_hosts(void) {
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
-			printf("%s\n", (temp_host->event_handler_enabled == TRUE) ? "Yes" : "No");
+			printf("%s\n", (temp_host->event_handler_enabled == TRUE) ? "有効" : "無効");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			options = 0;
 			if(flag_isset(temp_host->stalking_options, OPT_UP) == TRUE) {
 				options = 1;
-				printf("Up");
+				printf("稼動(UP)");
 				}
 			if(flag_isset(temp_host->stalking_options, OPT_DOWN) == TRUE) {
-				printf("%sDown", (options) ? ", " : "");
+				printf("%s停止(DOWN)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_host->stalking_options, OPT_UNREACHABLE) == TRUE) {
-				printf("%sUnreachable", (options) ? ", " : "");
+				printf("%s未到達(UNREACHABLE)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
-			printf("%s\n", (temp_host->flap_detection_enabled == TRUE) ? "Yes" : "No");
+			printf("%s\n", (temp_host->flap_detection_enabled == TRUE) ? "有効" : "無効");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			if(temp_host->low_flap_threshold == 0.0)
-				printf("Program-wide value\n");
+				printf("グローバル設定\n");
 			else
 				printf("%3.1f%%\n", temp_host->low_flap_threshold);
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			if(temp_host->high_flap_threshold == 0.0)
-				printf("Program-wide value\n");
+				printf("グローバル設定\n");
 			else
 				printf("%3.1f%%\n", temp_host->high_flap_threshold);
 			printf("</TD>\n");
@@ -665,22 +666,22 @@ void display_hosts(void) {
 			options = 0;
 			if(flag_isset(temp_host->flap_detection_options, OPT_UP) == TRUE) {
 				options = 1;
-				printf("Up");
+				printf("Up稼動(UP)");
 				}
 			if(flag_isset(temp_host->flap_detection_options, OPT_DOWN) == TRUE) {
-				printf("%sDown", (options) ? ", " : "");
+				printf("%s停止(DOWN)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_host->flap_detection_options, OPT_UNREACHABLE) == TRUE) {
-				printf("%sUnreachable", (options) ? ", " : "");
+				printf("%s未到達(UNREACHABLE)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
-			printf("%s\n", (temp_host->process_performance_data == TRUE) ? "Yes" : "No");
+			printf("%s\n", (temp_host->process_performance_data == TRUE) ? "有効" : "無効");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>%s</TD>", bg_class, (temp_host->notes == NULL) ? "&nbsp;" : html_encode(temp_host->notes, FALSE));
@@ -723,14 +724,14 @@ void display_hosts(void) {
 			options = 0;
 			if(temp_host->retain_status_information == TRUE) {
 				options = 1;
-				printf("Status Information");
+				printf("ステータス情報");
 				}
 			if(temp_host->retain_nonstatus_information == TRUE) {
-				printf("%sNon-Status Information", (options == 1) ? ", " : "");
+				printf("%sステータス情報以外", (options == 1) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("</TR>\n");
@@ -757,20 +758,20 @@ void display_hostgroups(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Host Group%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : " "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>ホストグループ %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Group Name</TH>");
-	printf("<TH CLASS='data'>Description</TH>");
-	printf("<TH CLASS='data'>Host Members</TH>");
-	printf("<TH CLASS='data'>Notes</TH>");
-	printf("<TH CLASS='data'>Notes URL</TH>");
-	printf("<TH CLASS='data'>Action URL</TH>");
+	printf("<TH CLASS='data'>グループ名</TH>");
+	printf("<TH CLASS='data'>説明</TH>");
+	printf("<TH CLASS='data'>このホストのメンバー</TH>");
+	printf("<TH CLASS='data'>メモ</TH>");
+	printf("<TH CLASS='data'>メモURL</TH>");
+	printf("<TH CLASS='data'>アクションURL</TH>");
 	printf("</TR>\n");
 
 	/* check all the hostgroups... */
@@ -832,20 +833,20 @@ void display_servicegroups(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Service Group%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : " "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>サービスグループ %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Group Name</TH>");
-	printf("<TH CLASS='data'>Description</TH>");
-	printf("<TH CLASS='data'>Service Members</TH>");
-	printf("<TH CLASS='data'>Notes</TH>");
-	printf("<TH CLASS='data'>Notes URL</TH>");
-	printf("<TH CLASS='data'>Action URL</TH>");
+	printf("<TH CLASS='data'>グループ名</TH>");
+	printf("<TH CLASS='data'>説明</TH>");
+	printf("<TH CLASS='data'>このサービスのメンバー</TH>");
+	printf("<TH CLASS='data'>メモ</TH>");
+	printf("<TH CLASS='data'>メモURL</TH>");
+	printf("<TH CLASS='data'>アクションURL</TH>");
 	printf("</TR>\n");
 
 	/* check all the servicegroups... */
@@ -911,8 +912,8 @@ void display_contacts(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Contact%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : " "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>通知先 %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
@@ -920,18 +921,18 @@ void display_contacts(void) {
 	printf("<TABLE CLASS='data'>\n");
 
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Contact Name</TH>");
-	printf("<TH CLASS='data'>Alias</TH>");
-	printf("<TH CLASS='data'>Email Address</TH>");
-	printf("<TH CLASS='data'>Pager Address/Number</TH>");
-	printf("<TH CLASS='data'>Minimum Importance</TH>");
-	printf("<TH CLASS='data'>Service Notification Options</TH>");
-	printf("<TH CLASS='data'>Host Notification Options</TH>");
-	printf("<TH CLASS='data'>Service Notification Period</TH>");
-	printf("<TH CLASS='data'>Host Notification Period</TH>");
-	printf("<TH CLASS='data'>Service Notification Commands</TH>");
-	printf("<TH CLASS='data'>Host Notification Commands</TH>");
-	printf("<TH CLASS='data'>Retention Options</TH>");
+	printf("<TH CLASS='data'>通知先名</TH>");
+	printf("<TH CLASS='data'>エイリアス</TH>");
+	printf("<TH CLASS='data'>メールアドレス</TH>");
+	printf("<TH CLASS='data'>携帯番号/アドレス</TH>");
+	printf("<TH CLASS='data'>最小重要度</TH>");
+	printf("<TH CLASS='data'>サービス通知オプション</TH>");
+	printf("<TH CLASS='data'>ホスト通知オプション</TH>");
+	printf("<TH CLASS='data'>サービス通知期間</TH>");
+	printf("<TH CLASS='data'>ホスト通知期間</TH>");
+	printf("<TH CLASS='data'>サービス通知コマンド</TH>");
+	printf("<TH CLASS='data'>ホスト通知コマンド</TH>");
+	printf("<TH CLASS='data'>保持オプション</TH>");
 	printf("</TR>\n");
 
 	/* check all contacts... */
@@ -958,56 +959,56 @@ void display_contacts(void) {
 			options = 0;
 			if(flag_isset(temp_contact->service_notification_options, OPT_UNKNOWN)) {
 				options = 1;
-				printf("Unknown");
+				printf("不明(UNKNOWN)");
 				}
 			if(flag_isset(temp_contact->service_notification_options, OPT_WARNING)) {
-				printf("%sWarning", (options) ? ", " : "");
+				printf("%s警告(WARNING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_contact->service_notification_options, OPT_CRITICAL)) {
-				printf("%sCritical", (options) ? ", " : "");
+				printf("%s異常(CRITICAL)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_contact->service_notification_options, OPT_RECOVERY)) {
-				printf("%sRecovery", (options) ? ", " : "");
+				printf("%s復旧(RECOVERY)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_contact->service_notification_options, OPT_FLAPPING)) {
-				printf("%sFlapping", (options) ? ", " : "");
+				printf("%sフラッピング(FLAPPING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_contact->service_notification_options, OPT_DOWNTIME)) {
-				printf("%sDowntime", (options) ? ", " : "");
+				printf("%sダウンタイム", (options) ? ", " : "");
 				options = 1;
 				}
 			if(!options)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			options = 0;
 			if(flag_isset(temp_contact->host_notification_options, OPT_DOWN) == TRUE) {
 				options = 1;
-				printf("Down");
+				printf("停止(DOWN)");
 				}
 			if(flag_isset(temp_contact->host_notification_options, OPT_UNREACHABLE) == TRUE) {
-				printf("%sUnreachable", (options) ? ", " : "");
+				printf("%s未到達(UNREACHABLE)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_contact->host_notification_options, OPT_RECOVERY) == TRUE) {
-				printf("%sRecovery", (options) ? ", " : "");
+				printf("%s復旧(RECOVERY)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_contact->host_notification_options, OPT_FLAPPING) == TRUE) {
-				printf("%sFlapping", (options) ? ", " : "");
+				printf("%sフラッピング(FLAPPING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_contact->host_notification_options, OPT_DOWNTIME) == TRUE) {
-				printf("%sDowntime", (options) ? ", " : "");
+				printf("%sダウンタイム", (options) ? ", " : "");
 				options = 1;
 				}
 			if(!options)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>\n", bg_class);
@@ -1037,7 +1038,7 @@ void display_contacts(void) {
 				found = TRUE;
 				}
 			if(found == FALSE)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
@@ -1053,21 +1054,21 @@ void display_contacts(void) {
 				found = TRUE;
 				}
 			if(found == FALSE)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			options = 0;
 			if(temp_contact->retain_status_information == TRUE) {
 				options = 1;
-				printf("Status Information");
+				printf("ステータス情報");
 				}
 			if(temp_contact->retain_nonstatus_information == TRUE) {
-				printf("%sNon-Status Information", (options == 1) ? ", " : "");
+				printf("%sステータス情報以外", (options == 1) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("</TR>\n");
@@ -1095,8 +1096,8 @@ void display_contactgroups(void) {
 		}
 
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Contact Group%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : " "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>通知先グループ %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
@@ -1104,9 +1105,9 @@ void display_contactgroups(void) {
 	printf("<TABLE BORDER=0 CELLSPACING=3 CELLPADDING=0>\n");
 
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Group Name</TH>\n");
-	printf("<TH CLASS='data'>Description</TH>\n");
-	printf("<TH CLASS='data'>Contact Members</TH>\n");
+	printf("<TH CLASS='data'>グループ名</TH>\n");
+	printf("<TH CLASS='data'>説明</TH>\n");
+	printf("<TH CLASS='data'>このグループのメンバー</TH>\n");
 	printf("</TR>\n");
 
 	/* check all the contact groups... */
@@ -1158,7 +1159,7 @@ void display_services(void) {
 	char *command_name;
 	int options;
 	int odd = 0;
-	char time_string[16];
+	char time_string[24];
 	const char *bg_class;
 	int num_contacts = 0;
 
@@ -1169,52 +1170,52 @@ void display_services(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Service%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : "s Named or on Host "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>%sサービス %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : "次のホストまたは指定された"), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data' COLSPAN=2>Service</TH>");
+	printf("<TH CLASS='data' COLSPAN=2>サービス</TH>");
 	printf("</TR>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Host</TH>\n");
-	printf("<TH CLASS='data'>Description</TH>\n");
-	printf("<TH CLASS='data'>Importance</TH>\n");
-	printf("<TH CLASS='data'>Max. Check Attempts</TH>\n");
-	printf("<TH CLASS='data'>Normal Check Interval</TH>\n");
-	printf("<TH CLASS='data'>Retry Check Interval</TH>\n");
-	printf("<TH CLASS='data'>Check Command</TH>\n");
-	printf("<TH CLASS='data'>Check Period</TH>\n");
-	printf("<TH CLASS='data'>Parallelize</TH>\n");
+	printf("<TH CLASS='data'>ホスト</TH>\n");
+	printf("<TH CLASS='data'>説明</TH>\n");
+	printf("<TH CLASS='data'>重要度</TH>\n");
+	printf("<TH CLASS='data'>最大チェック数</TH>\n");
+	printf("<TH CLASS='data'>通常のチェック間隔</TH>\n");
+	printf("<TH CLASS='data'>再試行のチェック間隔</TH>\n");
+	printf("<TH CLASS='data'>チェックコマンド</TH>\n");
+	printf("<TH CLASS='data'>チェック時間帯</TH>\n");
+	printf("<TH CLASS='data'>並列処理</TH>\n");
 	printf("<TH CLASS='data'>Volatile</TH>\n");
 	printf("<TH CLASS='data'>Obsess Over</TH>\n");
-	printf("<TH CLASS='data'>Enable Active Checks</TH>\n");
-	printf("<TH CLASS='data'>Enable Passive Checks</TH>\n");
-	printf("<TH CLASS='data'>Check Freshness</TH>\n");
-	printf("<TH CLASS='data'>Freshness Threshold</TH>\n");
-	printf("<TH CLASS='data'>Default Contacts/Groups</TH>\n");
-	printf("<TH CLASS='data'>Enable Notifications</TH>\n");
-	printf("<TH CLASS='data'>Notification Interval</TH>\n");
-	printf("<TH CLASS='data'>First Notification Delay</TH>\n");
-	printf("<TH CLASS='data'>Notification Options</TH>\n");
-	printf("<TH CLASS='data'>Notification Period</TH>\n");
-	printf("<TH CLASS='data'>Event Handler</TH>");
-	printf("<TH CLASS='data'>Enable Event Handler</TH>");
-	printf("<TH CLASS='data'>Stalking Options</TH>\n");
-	printf("<TH CLASS='data'>Enable Flap Detection</TH>");
-	printf("<TH CLASS='data'>Low Flap Threshold</TH>");
-	printf("<TH CLASS='data'>High Flap Threshold</TH>");
-	printf("<TH CLASS='data'>Flap Detection Options</TH>");
-	printf("<TH CLASS='data'>Process Performance Data</TH>");
-	printf("<TH CLASS='data'>Notes</TH>");
-	printf("<TH CLASS='data'>Notes URL</TH>");
-	printf("<TH CLASS='data'>Action URL</TH>");
-	printf("<TH CLASS='data'>Logo Image</TH>");
-	printf("<TH CLASS='data'>Image Alt</TH>");
-	printf("<TH CLASS='data'>Retention Options</TH>");
+	printf("<TH CLASS='data'>アクティブチェック</TH>\n");
+	printf("<TH CLASS='data'>パッシブチェック</TH>\n");
+	printf("<TH CLASS='data'>鮮度チェック(Freshness)</TH>\n");
+	printf("<TH CLASS='data'>鮮度しきい値(Freshness)</TH>\n");
+	printf("<TH CLASS='data'>デフォルトの通知先/グループ</TH>\n");
+	printf("<TH CLASS='data'>通知</TH>\n");
+	printf("<TH CLASS='data'>通知間隔</TH>\n");
+	printf("<TH CLASS='data'>初回通知遅延時間</TH>\n");
+	printf("<TH CLASS='data'>通知オプション</TH>\n");
+	printf("<TH CLASS='data'>通知時間帯</TH>\n");
+	printf("<TH CLASS='data'>イベントハンドラ</TH>");
+	printf("<TH CLASS='data'>イベントハンドラの有効化</TH>");
+	printf("<TH CLASS='data'>追跡オプション</TH>\n");
+	printf("<TH CLASS='data'>フラップ検知設定</TH>");
+	printf("<TH CLASS='data'>低フラップ閾値</TH>");
+	printf("<TH CLASS='data'>高フラップ閾値</TH>");
+	printf("<TH CLASS='data'>フラップ検知オプション</TH>");
+	printf("<TH CLASS='data'>パフォーマンスデータ処理</TH>");
+	printf("<TH CLASS='data'>メモ</TH>");
+	printf("<TH CLASS='data'>メモURL</TH>");
+	printf("<TH CLASS='data'>アクションURL</TH>");
+	printf("<TH CLASS='data'>ロゴ画像</TH>");
+	printf("<TH CLASS='data'>画像代替文字</TH>");
+	printf("<TH CLASS='data'>ステータス保持オプション</TH>");
 	printf("</TR>\n");
 
 	/* check all the services... */
@@ -1263,23 +1264,23 @@ void display_services(void) {
 				printf("<A HREF='%s?type=timeperiods&expand=%s'>%s</A>", CONFIG_CGI, url_encode(temp_service->check_period), html_encode(temp_service->check_period, FALSE));
 			printf("</TD>\n");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->parallelize == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->parallelize == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->is_volatile == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->is_volatile == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->obsess == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->obsess == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->checks_enabled == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->checks_enabled == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->accept_passive_checks == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->accept_passive_checks == TRUE) ? "有効" : "無効");
 
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->check_freshness == TRUE) ? "Yes" : "No");
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->check_freshness == TRUE) ? "有効" : "無効");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			if(temp_service->freshness_threshold == 0)
-				printf("Auto-determined value\n");
+				printf("自動設定\n");
 			else
-				printf("%d seconds\n", temp_service->freshness_threshold);
+				printf("%d 秒\n", temp_service->freshness_threshold);
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
@@ -1301,11 +1302,11 @@ void display_services(void) {
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
-			printf("%s\n", (temp_service->notifications_enabled == TRUE) ? "Yes" : "No");
+			printf("%s\n", (temp_service->notifications_enabled == TRUE) ? "有効" : "無効");
 			printf("</TD>\n");
 
 			get_interval_time_string(temp_service->notification_interval, time_string, sizeof(time_string));
-			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->notification_interval == 0) ? "<i>No Re-notification</i>" : html_encode(time_string, FALSE));
+			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, (temp_service->notification_interval == 0) ? "<i>再通知無し</i>" : html_encode(time_string, FALSE));
 
 			get_interval_time_string(temp_service->first_notification_delay, time_string, sizeof(time_string));
 			printf("<TD CLASS='%s'>%s</TD>\n", bg_class, time_string);
@@ -1314,30 +1315,30 @@ void display_services(void) {
 			options = 0;
 			if(flag_isset(temp_service->notification_options, OPT_UNKNOWN) == TRUE) {
 				options = 1;
-				printf("Unknown");
+				printf("不明(UNKNOWN)");
 				}
 			if(flag_isset(temp_service->notification_options, OPT_WARNING) == TRUE) {
-				printf("%sWarning", (options) ? ", " : "");
+				printf("%s警告(WARNING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->notification_options, OPT_CRITICAL) == TRUE) {
-				printf("%sCritical", (options) ? ", " : "");
+				printf("%s異常(CRITICAL)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->notification_options, OPT_RECOVERY) == TRUE) {
-				printf("%sRecovery", (options) ? ", " : "");
+				printf("%s復旧(RECOVERY)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->notification_options, OPT_FLAPPING) == TRUE) {
-				printf("%sFlapping", (options) ? ", " : "");
+				printf("%sフラッピング(FLAPPING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->notification_options, OPT_DOWNTIME) == TRUE) {
-				printf("%sDowntime", (options) ? ", " : "");
+				printf("%sダウンタイム", (options) ? ", " : "");
 				options = 1;
 				}
 			if(!options)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 			printf("<TD CLASS='%s'>", bg_class);
 			if(temp_service->notification_period == NULL)
@@ -1354,45 +1355,45 @@ void display_services(void) {
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
-			printf("%s\n", (temp_service->event_handler_enabled == TRUE) ? "Yes" : "No");
+			printf("%s\n", (temp_service->event_handler_enabled == TRUE) ? "有効" : "無効");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			options = 0;
 			if(flag_isset(temp_service->stalking_options, OPT_OK) == TRUE) {
 				options = 1;
-				printf("Ok");
+				printf("正常(OK)");
 				}
 			if(flag_isset(temp_service->stalking_options, OPT_WARNING) == TRUE) {
-				printf("%sWarning", (options) ? ", " : "");
+				printf("%s警告(WARNING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->stalking_options, OPT_UNKNOWN) == TRUE) {
-				printf("%sUnknown", (options) ? ", " : "");
+				printf("%s不明(UNKNOWN)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->stalking_options, OPT_CRITICAL) == TRUE) {
-				printf("%sCritical", (options) ? ", " : "");
+				printf("%s異常(CRITICAL)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
-			printf("%s\n", (temp_service->flap_detection_enabled == TRUE) ? "Yes" : "No");
+			printf("%s\n", (temp_service->flap_detection_enabled == TRUE) ? "有効" : "無効");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			if(temp_service->low_flap_threshold == 0.0)
-				printf("Program-wide value\n");
+				printf("グローバル設定\n");
 			else
 				printf("%3.1f%%\n", temp_service->low_flap_threshold);
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
 			if(temp_service->high_flap_threshold == 0.0)
-				printf("Program-wide value\n");
+				printf("グローバル設定\n");
 			else
 				printf("%3.1f%%\n", temp_service->high_flap_threshold);
 			printf("</TD>\n");
@@ -1401,26 +1402,26 @@ void display_services(void) {
 			options = 0;
 			if(flag_isset(temp_service->flap_detection_options, OPT_OK) == TRUE) {
 				options = 1;
-				printf("Ok");
+				printf("稼動(UP)");
 				}
 			if(flag_isset(temp_service->flap_detection_options, OPT_WARNING) == TRUE) {
-				printf("%sWarning", (options) ? ", " : "");
+				printf("%s警告(WARNING)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->flap_detection_options, OPT_UNKNOWN) == TRUE) {
-				printf("%sUnknown", (options) ? ", " : "");
+				printf("%s不明(UNKNOWN)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(flag_isset(temp_service->flap_detection_options, OPT_CRITICAL) == TRUE) {
-				printf("%sCritical", (options) ? ", " : "");
+				printf("%s異常(CRITICAL)", (options) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>", bg_class);
-			printf("%s\n", (temp_service->process_performance_data == TRUE) ? "Yes" : "No");
+			printf("%s\n", (temp_service->process_performance_data == TRUE) ? "有効" : "無効");
 			printf("</TD>\n");
 
 			printf("<TD CLASS='%s'>%s</TD>", bg_class, (temp_service->notes == NULL) ? "&nbsp;" : html_encode(temp_service->notes, FALSE));
@@ -1443,14 +1444,14 @@ void display_services(void) {
 			options = 0;
 			if(temp_service->retain_status_information == TRUE) {
 				options = 1;
-				printf("Status Information");
+				printf("ステータス情報");
 				}
 			if(temp_service->retain_nonstatus_information == TRUE) {
-				printf("%sNon-Status Information", (options == 1) ? ", " : "");
+				printf("%sステータス情報以外", (options == 1) ? ", " : "");
 				options = 1;
 				}
 			if(options == 0)
-				printf("None");
+				printf("無し");
 			printf("</TD>\n");
 
 			printf("</TR>\n");
@@ -1470,8 +1471,8 @@ void display_timeperiods(void) {
 	daterange *temp_daterange = NULL;
 	timeperiod *temp_timeperiod = NULL;
 	timeperiodexclusion *temp_timeperiodexclusion = NULL;
-	const char *months[12] = {"january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
-	const char *days[7] = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
+	char *months[12] = {"1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
+	char *days[7] = {"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"};
 	int odd = 0;
 	int day = 0;
 	int x = 0;
@@ -1489,19 +1490,19 @@ void display_timeperiods(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Time Period%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : " "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>時間帯 %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Name</TH>\n");
-	printf("<TH CLASS='data'>Alias/Description</TH>\n");
-	printf("<TH CLASS='data'>Exclusions</TH>\n");
-	printf("<TH CLASS='data'>Days/Dates</TH>\n");
-	printf("<TH CLASS='data'>Times</TH>\n");
+	printf("<TH CLASS='data'>名前</TH>\n");
+	printf("<TH CLASS='data'>エイリアス/説明</TH>\n");
+	printf("<TH CLASS='data'>除外</TH>\n");
+	printf("<TH CLASS='data'>曜日/日付</TH>\n");
+	printf("<TH CLASS='data'>時間</TH>\n");
 	printf("</TR>\n");
 
 	/* check all the time periods... */
@@ -1674,12 +1675,12 @@ void display_commands(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Command%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : " "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>コマンド %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P><DIV ALIGN=CENTER>\n");
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
-	printf("<TR><TH CLASS='data'>Command Name</TH><TH CLASS='data'>Command Line</TH></TR>\n");
+	printf("<TR><TH CLASS='data'>Command Name</TH><TH CLASS='data'>コマンドライン</TH></TR>\n");
 
 	/* check all commands */
 	for(temp_command = command_list; temp_command != NULL; temp_command = temp_command->next) if(((*to_expand) == '\0') || (!strcmp(to_expand, temp_command->name))) {
@@ -1735,7 +1736,7 @@ static void display_servicedependency(servicedependency *temp_sd)
 	printf("<TD CLASS='%s'><A HREF='%s?type=services&expand=%s#%s;", bg_class, CONFIG_CGI, url_encode(temp_sd->host_name), url_encode(temp_sd->host_name));
 	printf("%s'>%s</A></TD>\n", url_encode(temp_sd->service_description), html_encode(temp_sd->service_description, FALSE));
 
-	printf("<TD CLASS='%s'>%s</TD>", bg_class, (temp_sd->dependency_type == NOTIFICATION_DEPENDENCY) ? "Notification" : "Check Execution");
+	printf("<TD CLASS='%s'>%s</TD>", bg_class, (temp_sd->dependency_type == NOTIFICATION_DEPENDENCY) ? "通知" : "チェック実行");
 
 	printf("<TD CLASS='%s'>", bg_class);
 	if(temp_sd->dependency_period == NULL)
@@ -1747,23 +1748,23 @@ static void display_servicedependency(servicedependency *temp_sd)
 	printf("<TD CLASS='%s'>", bg_class);
 	options = FALSE;
 	if(flag_isset(temp_sd->failure_options, OPT_OK) == TRUE) {
-		printf("Ok");
+		printf("稼働(OK)");
 		options = TRUE;
 		}
 	if(flag_isset(temp_sd->failure_options, OPT_WARNING) == TRUE) {
-		printf("%sWarning", (options == TRUE) ? ", " : "");
+		printf("%s警告(WARNING)", (options == TRUE) ? ", " : "");
 		options = TRUE;
 		}
 	if(flag_isset(temp_sd->failure_options, OPT_UNKNOWN) == TRUE) {
-		printf("%sUnknown", (options == TRUE) ? ", " : "");
+		printf("%s不明(UNKNOWN)", (options == TRUE) ? ", " : "");
 		options = TRUE;
 		}
 	if(flag_isset(temp_sd->failure_options, OPT_CRITICAL) == TRUE) {
-		printf("%sCritical", (options == TRUE) ? ", " : "");
+		printf("%s異常(CRITICAL)", (options == TRUE) ? ", " : "");
 		options = TRUE;
 		}
 	if(flag_isset(temp_sd->failure_options, OPT_PENDING) == TRUE) {
-		printf("%sPending", (options == TRUE) ? ", " : "");
+		printf("%s未解決(PENDING)", (options == TRUE) ? ", " : "");
 		options = TRUE;
 		}
 	printf("</TD>\n");
@@ -1779,25 +1780,25 @@ void display_servicedependencies(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Service Dependencie%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : "s Involving Host "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>%sサービス依存関係 %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : "次のホストを含む"), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data' COLSPAN=2>Dependent Service</TH>");
-	printf("<TH CLASS='data' COLSPAN=2>Master Service</TH>");
+	printf("<TH CLASS='data' COLSPAN=2>依存サービス</TH>");
+	printf("<TH CLASS='data' COLSPAN=2>上位サービス</TH>");
 	printf("</TR>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Host</TH>");
-	printf("<TH CLASS='data'>Service</TH>");
-	printf("<TH CLASS='data'>Host</TH>");
-	printf("<TH CLASS='data'>Service</TH>");
-	printf("<TH CLASS='data'>Dependency Type</TH>");
-	printf("<TH CLASS='data'>Dependency Period</TH>");
-	printf("<TH CLASS='data'>Dependency Failure Options</TH>");
+	printf("<TH CLASS='data'>ホスト</TH>");
+	printf("<TH CLASS='data'>サービス</TH>");
+	printf("<TH CLASS='data'>ホスト</TH>");
+	printf("<TH CLASS='data'>サービス</TH>");
+	printf("<TH CLASS='data'>依存タイプ</TH>");
+	printf("<TH CLASS='data'>依存期間</TH>");
+	printf("<TH CLASS='data'>依存失敗オプション</TH>");
 	printf("</TR>\n");
 
 	for(i = 0; i < num_objects.servicedependencies; i++) {
@@ -1817,7 +1818,7 @@ void display_serviceescalations(void) {
 	serviceescalation *temp_se = NULL;
 	contactsmember *temp_contactsmember = NULL;
 	contactgroupsmember *temp_contactgroupsmember = NULL;
-	char time_string[16] = "";
+	char time_string[24] = "";
 	int options = FALSE;
 	int odd = 0;
 	const char *bg_class = "";
@@ -1830,25 +1831,25 @@ void display_serviceescalations(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Service Escalation%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : "s on Host "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>%sサービスエスカレーション %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : "次のホストの"), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data' COLSPAN=2>Service</TH>");
+	printf("<TH CLASS='data' COLSPAN=2>サービス</TH>");
 	printf("</TR>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Host</TH>");
-	printf("<TH CLASS='data'>Description</TH>");
-	printf("<TH CLASS='data'>Contacts/Groups</TH>");
-	printf("<TH CLASS='data'>First Notification</TH>");
-	printf("<TH CLASS='data'>Last Notification</TH>");
-	printf("<TH CLASS='data'>Notification Interval</TH>");
-	printf("<TH CLASS='data'>Escalation Period</TH>");
-	printf("<TH CLASS='data'>Escalation Options</TH>");
+	printf("<TH CLASS='data'>ホスト</TH>");
+	printf("<TH CLASS='data'>説明</TH>");
+	printf("<TH CLASS='data'>通知先/グループ</TH>");
+	printf("<TH CLASS='data'>初回通知</TH>");
+	printf("<TH CLASS='data'>最終通知</TH>");
+	printf("<TH CLASS='data'>通知間隔</TH>");
+	printf("<TH CLASS='data'>エスカレーション期間</TH>");
+	printf("<TH CLASS='data'>エスカレーションオプション</TH>");
 	printf("</TR>\n");
 
 
@@ -1895,7 +1896,7 @@ void display_serviceescalations(void) {
 
 		printf("<TD CLASS='%s'>", bg_class);
 		if(temp_se->last_notification == 0)
-			printf("Infinity");
+			printf("無限");
 		else
 			printf("%d", temp_se->last_notification);
 		printf("</TD>\n");
@@ -1903,7 +1904,7 @@ void display_serviceescalations(void) {
 		get_interval_time_string(temp_se->notification_interval, time_string, sizeof(time_string));
 		printf("<TD CLASS='%s'>", bg_class);
 		if(temp_se->notification_interval == 0.0)
-			printf("Notify Only Once (No Re-notification)");
+			printf("1回のみ(再通知無し)");
 		else
 			printf("%s", time_string);
 		printf("</TD>\n");
@@ -1918,23 +1919,23 @@ void display_serviceescalations(void) {
 		printf("<TD CLASS='%s'>", bg_class);
 		options = FALSE;
 		if(flag_isset(temp_se->escalation_options, OPT_WARNING) == TRUE) {
-			printf("%sWarning", (options == TRUE) ? ", " : "");
+			printf("%s警告(WARNING)", (options == TRUE) ? ", " : "");
 			options = TRUE;
 			}
 		if(flag_isset(temp_se->escalation_options, OPT_UNKNOWN) == TRUE) {
-			printf("%sUnknown", (options == TRUE) ? ", " : "");
+			printf("%s不明(UNKNOWN)", (options == TRUE) ? ", " : "");
 			options = TRUE;
 			}
 		if(flag_isset(temp_se->escalation_options, OPT_CRITICAL) == TRUE) {
-			printf("%sCritical", (options == TRUE) ? ", " : "");
+			printf("%s異常(CRITICAL)", (options == TRUE) ? ", " : "");
 			options = TRUE;
 			}
 		if(flag_isset(temp_se->escalation_options, OPT_RECOVERY) == TRUE) {
-			printf("%sRecovery", (options == TRUE) ? ", " : "");
+			printf("%s復旧(RECOVERY)", (options == TRUE) ? ", " : "");
 			options = TRUE;
 			}
 		if(options == FALSE)
-			printf("None");
+			printf("無し");
 		printf("</TD>\n");
 
 		printf("</TR>\n");
@@ -1968,7 +1969,7 @@ static void display_hostdependency(hostdependency *temp_hd)
 
 	printf("<TD CLASS='%s'><A HREF='%s?type=hosts&expand=%s'>%s</A></TD>", bg_class, CONFIG_CGI, url_encode(temp_hd->host_name), html_encode(temp_hd->host_name, FALSE));
 
-	printf("<TD CLASS='%s'>%s</TD>", bg_class, (temp_hd->dependency_type == NOTIFICATION_DEPENDENCY) ? "Notification" : "Check Execution");
+	printf("<TD CLASS='%s'>%s</TD>", bg_class, (temp_hd->dependency_type == NOTIFICATION_DEPENDENCY) ? "通知" : "チェック実行");
 
 	printf("<TD CLASS='%s'>", bg_class);
 	if(temp_hd->dependency_period == NULL)
@@ -1980,19 +1981,19 @@ static void display_hostdependency(hostdependency *temp_hd)
 	printf("<TD CLASS='%s'>", bg_class);
 	options = FALSE;
 	if(flag_isset(temp_hd->failure_options, OPT_UP) == TRUE) {
-		printf("Up");
+		printf("稼働(OK)");
 		options = TRUE;
 		}
 	if(flag_isset(temp_hd->failure_options, OPT_DOWN) == TRUE) {
-		printf("%sDown", (options == TRUE) ? ", " : "");
+		printf("%s停止(DOWN)", (options == TRUE) ? ", " : "");
 		options = TRUE;
 		}
 	if(flag_isset(temp_hd->failure_options, OPT_UNREACHABLE) == TRUE) {
-		printf("%sUnreachable", (options == TRUE) ? ", " : "");
+		printf("%s未到達(UNREACHABLE)", (options == TRUE) ? ", " : "");
 		options = TRUE;
 		}
 	if(flag_isset(temp_hd->failure_options, OPT_PENDING) == TRUE) {
-		printf("%sPending", (options == TRUE) ? ", " : "");
+		printf("%s未解決(PENDING)", (options == TRUE) ? ", " : "");
 		options = TRUE;
 		}
 	printf("</TD>\n");
@@ -2009,19 +2010,19 @@ void display_hostdependencies(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Host Dependencie%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : "s Involving Host "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>%sホスト依存関係 %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : "次のホストを含む"), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Dependent Host</TH>");
-	printf("<TH CLASS='data'>Master Host</TH>");
-	printf("<TH CLASS='data'>Dependency Type</TH>");
-	printf("<TH CLASS='data'>Dependency Period</TH>");
-	printf("<TH CLASS='data'>Dependency Failure Options</TH>");
+	printf("<TH CLASS='data'>依存ホスト</TH>");
+	printf("<TH CLASS='data'>上位ホスト</TH>");
+	printf("<TH CLASS='data'>依存タイプ</TH>");
+	printf("<TH CLASS='data'>依存期間</TH>");
+	printf("<TH CLASS='data'>依存失敗オプション</TH>");
 	printf("</TR>\n");
 
 	/* print all host dependencies... */
@@ -2041,7 +2042,7 @@ void display_hostescalations(void) {
 	hostescalation *temp_he = NULL;
 	contactsmember *temp_contactsmember = NULL;
 	contactgroupsmember *temp_contactgroupsmember = NULL;
-	char time_string[16] = "";
+	char time_string[24] = "";
 	int options = FALSE;
 	int odd = 0;
 	const char *bg_class = "";
@@ -2054,21 +2055,21 @@ void display_hostescalations(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Host Escalation%s%s</DIV></P>\n",
-	       (*to_expand == '\0' ? "s" : "s for Host "), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>%sホストエスカレーション %s</DIV></P>\n",
+	       (*to_expand == '\0' ? "" : "次のホストの"), (*to_expand == '\0' ? "" : html_encode(to_expand, FALSE)));
 
 	printf("<P>\n");
 	printf("<DIV ALIGN=CENTER>\n");
 
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
 	printf("<TR>\n");
-	printf("<TH CLASS='data'>Host</TH>");
-	printf("<TH CLASS='data'>Contacts/Groups</TH>");
-	printf("<TH CLASS='data'>First Notification</TH>");
-	printf("<TH CLASS='data'>Last Notification</TH>");
-	printf("<TH CLASS='data'>Notification Interval</TH>");
-	printf("<TH CLASS='data'>Escalation Period</TH>");
-	printf("<TH CLASS='data'>Escalation Options</TH>");
+	printf("<TH CLASS='data'>ホスト</TH>");
+	printf("<TH CLASS='data'>通知先/グループ</TH>");
+	printf("<TH CLASS='data'>初回通知</TH>");
+	printf("<TH CLASS='data'>最終通知</TH>");
+	printf("<TH CLASS='data'>通知間隔</TH>");
+	printf("<TH CLASS='data'>エスカレーション期間</TH>");
+	printf("<TH CLASS='data'>エスカレーションオプション</TH>");
 	printf("</TR>\n");
 
 	/* print all hostescalations... */
@@ -2112,7 +2113,7 @@ void display_hostescalations(void) {
 
 		printf("<TD CLASS='%s'>", bg_class);
 		if(temp_he->last_notification == 0)
-			printf("Infinity");
+			printf("無限");
 		else
 			printf("%d", temp_he->last_notification);
 		printf("</TD>\n");
@@ -2120,7 +2121,7 @@ void display_hostescalations(void) {
 		get_interval_time_string(temp_he->notification_interval, time_string, sizeof(time_string));
 		printf("<TD CLASS='%s'>", bg_class);
 		if(temp_he->notification_interval == 0.0)
-			printf("Notify Only Once (No Re-notification)");
+			printf("1回のみ(再通知無し)");
 		else
 			printf("%s", time_string);
 		printf("</TD>\n");
@@ -2135,19 +2136,19 @@ void display_hostescalations(void) {
 		printf("<TD CLASS='%s'>", bg_class);
 		options = FALSE;
 		if(flag_isset(temp_he->escalation_options, OPT_DOWN) == TRUE) {
-			printf("%sDown", (options == TRUE) ? ", " : "");
+			printf("%s停止(DOWN)", (options == TRUE) ? ", " : "");
 			options = TRUE;
 			}
 		if(flag_isset(temp_he->escalation_options, OPT_UNREACHABLE) == TRUE) {
-			printf("%sUnreachable", (options == TRUE) ? ", " : "");
+			printf("%s未到達(UNREACHABLE)", (options == TRUE) ? ", " : "");
 			options = TRUE;
 			}
 		if(flag_isset(temp_he->escalation_options, OPT_RECOVERY) == TRUE) {
-			printf("%sRecovery", (options == TRUE) ? ", " : "");
+			printf("%s復旧(RECOVERY)", (options == TRUE) ? ", " : "");
 			options = TRUE;
 			}
 		if(options == FALSE)
-			printf("None");
+			printf("無し");
 		printf("</TD>\n");
 
 		printf("</TR>\n");
@@ -2164,9 +2165,8 @@ void display_hostescalations(void) {
 
 void unauthorized_message(void) {
 
-	printf("<P><DIV CLASS='errorMessage'>It appears as though you do not have permission to view the configuration information you requested...</DIV></P>\n");
-	printf("<P><DIV CLASS='errorDescription'>If you believe this is an error, check the HTTP server authentication requirements for accessing this CGI<br>");
-	printf("and check the authorization options in your CGI configuration file.</DIV></P>\n");
+	printf("<P><DIV CLASS='errorMessage'>要求したコマンドを送信する権限が無いようです。</DIV></P>\n");
+	printf("<P><DIV CLASS='errorDescription'>このメッセージが何らかのエラーであると思う場合はHTTPサーバのこのCGIに対するアクセス権限の設定かNagiosのCGI用設定ファイルの認証に関するオプションを調べてみてください</DIV></P>\n");
 
 	return;
 	}
@@ -2218,7 +2218,7 @@ void display_command_expansion(void) {
 		return;
 		}
 
-	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>Command Expansion</DIV></P>\n");
+	printf("<P><DIV ALIGN=CENTER CLASS='dataTitle'>拡張コマンド</DIV></P>\n");
 
 	/* Parse to_expand into parts */
 	for(i = 0; i < MAX_COMMAND_ARGUMENTS; i++) command_args[i] = NULL;
@@ -2242,12 +2242,12 @@ void display_command_expansion(void) {
 
 	printf("<P><DIV ALIGN=CENTER>\n");
 	printf("<TABLE BORDER=0 CLASS='data'>\n");
-	printf("<TR><TH CLASS='data'>Command Name</TH><TH CLASS='data'>Command Line</TH></TR>\n");
+	printf("<TR><TH CLASS='data'>Command Name</TH><TH CLASS='data'>コマンドライン</TH></TR>\n");
 
 	if((*to_expand) != '\0') {
 		arg_count[0] = 0;
 
-		printf("<TR CLASS='dataEven'><TD CLASS='dataEven'>To expand:</TD><TD CLASS='dataEven'>%s", escape_string(command_args[0]));
+		printf("<TR CLASS='dataEven'><TD CLASS='dataEven'>拡張:</TD><TD CLASS='dataEven'>%s", escape_string(command_args[0]));
 		for(i = 1; (i < MAX_COMMAND_ARGUMENTS) && command_args[i]; i++)
 			printf("!<FONT\n   COLOR='%s'>%s</FONT>", hash_color(i), escape_string(command_args[i]));
 		printf("\n</TD></TR>\n");
@@ -2294,7 +2294,7 @@ void display_command_expansion(void) {
 						c = strstr(cc, "$");
 						if(c)(*(c++)) = '\0';
 						printf("<FONT COLOR='#777777'>$%s%s</FONT>", html_encode(cc, FALSE), (c ? "$" : ""));
-						if(!c) printf("<FONT COLOR='#FF0000'> (not properly terminated)</FONT>");
+						if(!c) printf("<FONT COLOR='#FF0000'> (適切に終端していません)</FONT>");
 						}
 					else {
 						/* $ARGn$ macro */
@@ -2308,18 +2308,18 @@ void display_command_expansion(void) {
 									if(*(command_args[i]) != '\0') printf("<FONT COLOR='%s'><B>%s%s%s</B></FONT>",
 										                                      hash_color(i), ((lead_space[i] > 0) || (trail_space[i] > 0) ? "<U>&zwj;" : ""),
 										                                      html_encode(command_args[i], FALSE), ((lead_space[i] > 0) || (trail_space[i] > 0) ? "&zwj;</U>" : ""));
-									else printf("<FONT COLOR='#0000FF'>(empty)</FONT>");
+									else printf("<FONT COLOR='#0000FF'>(空)</FONT>");
 									}
-								else printf("<FONT COLOR='#0000FF'>(undefined)</FONT>");
+								else printf("<FONT COLOR='#0000FF'>(未定義)</FONT>");
 								}
-							else printf("<FONT COLOR='#FF0000'>(not a valid $ARGn$ index: %u)</FONT>", i);
+							else printf("<FONT COLOR='#FF0000'>(有効な $ARGn$ インデックスではありません: %u)</FONT>", i);
 							if((*c) != '\0') c++;
-							else printf("<FONT COLOR='#FF0000'> (not properly terminated)</FONT>");
+							else printf("<FONT COLOR='#FF0000'> (適切に終端していません)</FONT>");
 							}
 						else {
 							/* Syntax err in index */
 							c = strstr(cc, "$");
-							printf("<FONT COLOR='#FF0000'>(not an $ARGn$ index: &quot;%s&quot;)</FONT>", html_encode(strtok(cc, "$"), FALSE));
+							printf("<FONT COLOR='#FF0000'>($ARGn$ インデックスではありません: &quot;%s&quot;)</FONT>", html_encode(strtok(cc, "$"), FALSE));
 							if(c) c++;
 							}
 						}
@@ -2330,19 +2330,19 @@ void display_command_expansion(void) {
 
 				for(i = 1; (i < MAX_COMMAND_ARGUMENTS) && (command_args[i]); i++) {
 					if(arg_count[i] == 0) {
-						printf("<TR CLASS='%s'><TD CLASS='%s' ALIGN='right'><FONT COLOR='#FF0000'>unused:</FONT></TD>\n", bg_class, bg_class);
+						printf("<TR CLASS='%s'><TD CLASS='%s' ALIGN='right'><FONT COLOR='#FF0000'>未使用:</FONT></TD>\n", bg_class, bg_class);
 						printf("<TD CLASS='%s'>$ARG%u$=<FONT COLOR='%s'>%s%s%s</FONT></TD></TR>\n", bg_class, i, hash_color(i),
 						       ((lead_space[i] > 0) || (trail_space[i] > 0) ? "<U>&zwj;" : ""), html_encode(command_args[i], FALSE),
 						       ((lead_space[i] > 0) || (trail_space[i] > 0) ? "&zwj;</U>" : ""));
 						}
 					else if(arg_count[i] > 1) {
-						printf("<TR CLASS='%s'><TD CLASS='%s' ALIGN='right'>used %u x:</TD>\n", bg_class, bg_class, i);
+						printf("<TR CLASS='%s'><TD CLASS='%s' ALIGN='right'>使用 %u x:</TD>\n", bg_class, bg_class, i);
 						printf("<TD CLASS='%s'>$ARG%u$=<FONT COLOR='%s'>%s%s%s</FONT></TD></TR>\n", bg_class, i, hash_color(i),
 						       ((lead_space[i] > 0) || (trail_space[i] > 0) ? "<U>&zwj;" : ""), html_encode(command_args[i], FALSE),
 						       ((lead_space[i] > 0) || (trail_space[i] > 0) ? "&zwj;</U>" : ""));
 						}
 					if((lead_space[i] > 0) || (trail_space[i] > 0)) {
-						printf("<TR CLASS='%s'><TD CLASS='%s' ALIGN='right'><FONT COLOR='#0000FF'>dangling whitespace:</FONT></TD>\n", bg_class, bg_class);
+						printf("<TR CLASS='%s'><TD CLASS='%s' ALIGN='right'><FONT COLOR='#0000FF'>空白がぶらぶらしてます(dangling whitespace):</FONT></TD>\n", bg_class, bg_class);
 						printf("<TD CLASS='%s'>$ARG%u$=<FONT COLOR='#0000FF'>", bg_class, i);
 						for(c = command_args[i], j = 0; c && isspace(*c); c++, j++)
 							/* TODO: As long as the hyperlinks change all whitespace into actual spaces,
@@ -2378,16 +2378,16 @@ void display_command_expansion(void) {
 
 		if(!arg_count[0]) {
 			printf("<TR CLASS='dataOdd'><TD CLASS='dataOdd' ALIGN='right'><FONT\n");
-			printf("COLOR='#FF0000'>Error:</FONT></TD><TD CLASS='dataOdd'><FONT COLOR='#FF0000'>No\n");
-			printf("command &quot;%s&quot; found</FONT></TD></TR>\n", html_encode(command_args[0], FALSE));
+			printf("COLOR='#FF0000'>エラー:</FONT></TD><TD CLASS='dataOdd'><FONT COLOR='#FF0000'>No\n");
+			printf("コマンド &quot;%s&quot; が見つかりました</FONT></TD></TR>\n", html_encode(command_args[0], FALSE));
 			}
 		}
 
-	printf("<TR CLASS='dataEven'><TD><BR/></TD><TD CLASS='dataEven'>Enter the command_check definition from a host or service definition and press Go to see the expansion of the command</TD></TR>\n");
-	printf("<TR CLASS='dataEven'><TD CLASS='dataEven'>To expand:</TD><TD CLASS='dataEven'><FORM\n");
+	printf("<TR CLASS='dataEven'><TD><BR/></TD><TD CLASS='dataEven'>ホストまたはサービスの定期からcommand_checkの定義を入力してコマンドの拡張を見に行くには実行を押します。</TD></TR>\n");
+	printf("<TR CLASS='dataEven'><TD CLASS='dataEven'>拡張:</TD><TD CLASS='dataEven'><FORM\n");
 	printf("METHOD='GET' ACTION='%s'><INPUT TYPE='HIDDEN' NAME='type' VALUE='command'><INPUT\n", CONFIG_CGI);
 	printf("TYPE='text' NAME='expand' SIZE='100%%' VALUE='%s'>\n", html_encode(to_expand, FALSE));
-	printf("<INPUT TYPE='SUBMIT' VALUE='Go'></FORM></TD></TR>\n");
+	printf("<INPUT TYPE='SUBMIT' VALUE='実行'></FORM></TD></TR>\n");
 
 	printf("</TABLE>\n");
 	printf("</DIV></P>\n");
@@ -2401,7 +2401,7 @@ void display_options(void) {
 
 	printf("<br><br>\n");
 
-	printf("<div align=center class='reportSelectTitle'>Select Type of Config Data You Wish To View</div>\n");
+	printf("<div align=center class='reportSelectTitle'>閲覧したい設定項目を選んでください</div>\n");
 
 	printf("<br><br>\n");
 
@@ -2410,26 +2410,26 @@ void display_options(void) {
 	printf("<div align=center>\n");
 	printf("<table border=0>\n");
 
-	printf("<tr><td align=left class='reportSelectSubTitle'>Object Type:</td></tr>\n");
+	printf("<tr><td align=left class='reportSelectSubTitle'>オブジェクトタイプ:</td></tr>\n");
 	printf("<tr><td align=left class='reportSelectItem'>");
 	printf("<select name='type'>\n");
-	printf("<option value='hosts' %s>Hosts\n", (display_type == DISPLAY_HOSTS) ? "SELECTED" : "");
-	printf("<option value='hostdependencies' %s>Host Dependencies\n", (display_type == DISPLAY_HOSTDEPENDENCIES) ? "SELECTED" : "");
-	printf("<option value='hostescalations' %s>Host Escalations\n", (display_type == DISPLAY_HOSTESCALATIONS) ? "SELECTED" : "");
-	printf("<option value='hostgroups' %s>Host Groups\n", (display_type == DISPLAY_HOSTGROUPS) ? "SELECTED" : "");
-	printf("<option value='services' %s>Services\n", (display_type == DISPLAY_SERVICES) ? "SELECTED" : "");
-	printf("<option value='servicegroups' %s>Service Groups\n", (display_type == DISPLAY_SERVICEGROUPS) ? "SELECTED" : "");
-	printf("<option value='servicedependencies' %s>Service Dependencies\n", (display_type == DISPLAY_SERVICEDEPENDENCIES) ? "SELECTED" : "");
-	printf("<option value='serviceescalations' %s>Service Escalations\n", (display_type == DISPLAY_SERVICEESCALATIONS) ? "SELECTED" : "");
-	printf("<option value='contacts' %s>Contacts\n", (display_type == DISPLAY_CONTACTS) ? "SELECTED" : "");
-	printf("<option value='contactgroups' %s>Contact Groups\n", (display_type == DISPLAY_CONTACTGROUPS) ? "SELECTED" : "");
-	printf("<option value='timeperiods' %s>Timeperiods\n", (display_type == DISPLAY_TIMEPERIODS) ? "SELECTED" : "");
-	printf("<option value='commands' %s>Commands\n", (display_type == DISPLAY_COMMANDS) ? "SELECTED" : "");
-	printf("<option value='command' %s>Command Expansion\n", (display_type == DISPLAY_COMMAND_EXPANSION) ? "SELECTED" : "");
+	printf("<option value='hosts' %s>ホスト\n", (display_type == DISPLAY_HOSTS) ? "SELECTED" : "");
+	printf("<option value='hostdependencies' %s>ホスト依存関係\n", (display_type == DISPLAY_HOSTDEPENDENCIES) ? "SELECTED" : "");
+	printf("<option value='hostescalations' %s>ホストエスカレーション\n", (display_type == DISPLAY_HOSTESCALATIONS) ? "SELECTED" : "");
+	printf("<option value='hostgroups' %s>ホストグループ\n", (display_type == DISPLAY_HOSTGROUPS) ? "SELECTED" : "");
+	printf("<option value='services' %s>サービス\n", (display_type == DISPLAY_SERVICES) ? "SELECTED" : "");
+	printf("<option value='servicegroups' %s>サービスグループ\n", (display_type == DISPLAY_SERVICEGROUPS) ? "SELECTED" : "");
+	printf("<option value='servicedependencies' %s>サービス依存関係\n", (display_type == DISPLAY_SERVICEDEPENDENCIES) ? "SELECTED" : "");
+	printf("<option value='serviceescalations' %s>サービスエスカレーション\n", (display_type == DISPLAY_SERVICEESCALATIONS) ? "SELECTED" : "");
+	printf("<option value='contacts' %s>通知先\n", (display_type == DISPLAY_CONTACTS) ? "SELECTED" : "");
+	printf("<option value='contactgroups' %s>通知先グループ\n", (display_type == DISPLAY_CONTACTGROUPS) ? "SELECTED" : "");
+	printf("<option value='timeperiods' %s>時間帯\n", (display_type == DISPLAY_TIMEPERIODS) ? "SELECTED" : "");
+	printf("<option value='commands' %s>コマンド\n", (display_type == DISPLAY_COMMANDS) ? "SELECTED" : "");
+	printf("<option value='command' %s>拡張コマンド\n", (display_type == DISPLAY_COMMAND_EXPANSION) ? "SELECTED" : "");
 	printf("</select>\n");
 	printf("</td></tr>\n");
 
-	printf("<tr><td class='reportSelectItem'><input type='submit' value='Continue'></td></tr>\n");
+	printf("<tr><td class='reportSelectItem'><input type='submit' value='続行'></td></tr>\n");
 	printf("</table>\n");
 	printf("</div>\n");
 

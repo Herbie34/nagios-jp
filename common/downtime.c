@@ -432,13 +432,13 @@ int register_downtime(int type, unsigned long downtime_id) {
 	minutes = ((temp_downtime->duration - (hours * 3600)) / 60);
 	seconds = temp_downtime->duration - (hours * 3600) - (minutes * 60);
 	if(temp_downtime->type == HOST_DOWNTIME)
-		type_string = "host";
+		type_string = "ホスト";
 	else
-		type_string = "service";
+		type_string = "サービス";
 	if(temp_downtime->fixed == TRUE)
-		asprintf(&temp_buffer, "This %s has been scheduled for fixed downtime from %s to %s.  Notifications for the %s will not be sent out during that time period.", type_string, start_time_string, end_time_string, type_string);
+		asprintf(&temp_buffer, "この %s は %s から %s まで固定した故障時間としてスケジュールされました。また、%s に関する通知はその期間には送られません。", type_string, start_time_string, end_time_string, type_string);
 	else
-		asprintf(&temp_buffer, "This %s has been scheduled for flexible downtime starting between %s and %s and lasting for a period of %d hours and %d minutes.  Notifications for the %s will not be sent out during that time period.", type_string, start_time_string, end_time_string, hours, minutes, type_string);
+		asprintf(&temp_buffer, "この %s は %s から %s までの間に障害が発生し %d 時間 %d 分 継続してるため非固定の故障時間としてスケジュールされました。また、%s に関する通知はその期間には送られません。", type_string, start_time_string, end_time_string, hours, minutes, type_string);
 
 
 	log_debug_info(DEBUGL_DOWNTIME, 0, "Scheduled Downtime Details:\n");
@@ -946,30 +946,30 @@ int check_for_expired_downtime(void) {
 			/* find the host or service associated with this downtime */
 			if(temp_downtime->type == HOST_DOWNTIME) {
 				if((hst = find_host(temp_downtime->host_name)) == NULL) {
-					log_debug_info(DEBUGL_DOWNTIME, 1, 
-							"Unable to find host (%s) for downtime\n", 
+					log_debug_info(DEBUGL_DOWNTIME, 1,
+							"Unable to find host (%s) for downtime\n",
 							temp_downtime->host_name);
 					return ERROR;
 					}
 
 					/* send a notification */
-					host_notification(hst, NOTIFICATION_DOWNTIMEEND, 
-							temp_downtime->author, temp_downtime->comment, 
+					host_notification(hst, NOTIFICATION_DOWNTIMEEND,
+							temp_downtime->author, temp_downtime->comment,
 							NOTIFICATION_OPTION_NONE);
 				}
 			else {
-				if((svc = find_service(temp_downtime->host_name, 
+				if((svc = find_service(temp_downtime->host_name,
 							temp_downtime->service_description)) == NULL) {
-					log_debug_info(DEBUGL_DOWNTIME, 1, 
-							"Unable to find service (%s) host (%s) for downtime\n", 
-							temp_downtime->service_description, 
+					log_debug_info(DEBUGL_DOWNTIME, 1,
+							"Unable to find service (%s) host (%s) for downtime\n",
+							temp_downtime->service_description,
 							temp_downtime->host_name);
 					return ERROR;
 					}
 
 				/* send a notification */
-				service_notification(svc, NOTIFICATION_DOWNTIMEEND, 
-							temp_downtime->author, temp_downtime->comment, 
+				service_notification(svc, NOTIFICATION_DOWNTIMEEND,
+							temp_downtime->author, temp_downtime->comment,
 							NOTIFICATION_OPTION_NONE);
 			}
 

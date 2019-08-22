@@ -135,7 +135,7 @@ int main(int argc, char **argv) {
 	/* reset internal variables */
 	reset_cgi_vars();
 
-	/* Initialize shared configuration variables */                             
+	/* Initialize shared configuration variables */
 	init_shared_cfg_vars(1);
 
 	/* read the CGI configuration file */

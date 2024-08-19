@@ -143,10 +143,10 @@ $this_year = '2024';
 
 
 <div id="currentversioninfo">
-	<div class="product">Nagios<sup><span style="font-size: small;">&reg;</span></sup> Core<sup><span style="font-size: small;">&trade;</span></sup></div>
-	<div class="version">Version <?php echo $this_version; ?></div>
-	<div class="releasedate">October 08, 2024</div>
-	<div class="checkforupdates"><a href="https://www.nagios.org/checkforupdates/?version=<?php echo $this_version; ?>&amp;product=nagioscore" target="_blank">Check for updates</a></div>
+	<div class="product">Nagios<sup><span style="font-size: small;">&reg;</span></sup> Core<sup><span style="font-size: small;">&trade;</span></sup> 日本語化</div>
+	<div class="version">バージョン <?php echo $this_version; ?></div>
+	<div class="releasedate">2024年10月8日</div>
+	<div class="checkforupdates"><a href="https://www.nagios.org/checkforupdates/?version=<?php echo $this_version; ?>&amp;product=nagioscore" target="_blank">更新のチェック</a></div>
 </div>
 
 
@@ -156,8 +156,8 @@ $this_year = '2024';
 	if (!$updateinfo['update_checks_enabled']) {
 ?>
 		<div class="updatechecksdisabled">
-			<div class="warningmessage">Warning: Automatic Update Checks are Disabled!</div>
-			<div class="submessage">Disabling update checks presents a possible security risk.  Visit <a href="https://www.nagios.org/" target="_blank">nagios.org</a> to check for updates manually or enable update checks in your Nagios config file.</a></div>
+			<div class="warningmessage">警告: 自動更新チェックは無効です。</div>
+			<div class="submessage">アップデートチェックを無効にすると潜在的なセキュリティリスクがあります。Nagiosの設定ファイルで更新チェックを有効にするか、手動で更新を確認するために<a href="https://www.nagios.org/" target="_blank">nagios.org</a>を訪れてください。</a></div>
 		</div>
 <?php
 	} else if (
@@ -165,8 +165,8 @@ $this_year = '2024';
 	) {
 ?>
 		<div class="updateavailable">
-			<div class="updatemessage">A new version of Nagios Core is available!</div>
-			<div class="submessage">Visit <a href="https://www.nagios.org/download/" target="_blank">nagios.org</a> to download Nagios <?php echo htmlentities($updateinfo['update_version'], ENT_QUOTES, 'UTF-8');?>.</div>
+			<div class="updatemessage">Nagios Coreの最新バージョンが利用可能です</div>
+			<div class="submessage">Nagios <?php echo htmlentities($updateinfo['update_version'], ENT_QUOTES, 'UTF-8');?>をダウンロードするために<a href="https://www.nagios.org/download/" target="_blank">nagios.org</a>を訪れてください。</div>
 		</div>
 <?php
 	}
@@ -186,15 +186,15 @@ $this_year = '2024';
 	<div id='splashrow1'>
 
 		<div id="splashbox1" class="splashbox splashbox-clear">
-			<h2>Get Started</h2>
+			<h2>始めに</h2>
 			<ul>
-				<li><a href="https://go.nagios.com/nagioscore/startmonitoring" target="_blank">Start monitoring your infrastructure</a></li>
-				<li><a href="https://go.nagios.com/nagioscore/changelook" target="_blank">Change the look and feel of Nagios</a></li>
-				<li><a href="https://go.nagios.com/nagioscore/extend" target="_blank">Extend Nagios with hundreds of addons</a></li>
+				<li><a href="https://go.nagios.com/nagioscore/startmonitoring" target="_blank">インフラストラクチャの監視を開始</a></li>
+				<li><a href="https://go.nagios.com/nagioscore/changelook" target="_blank">Nagiosの外観を変更</a></li>
+				<li><a href="https://go.nagios.com/nagioscore/extend" target="_blank">数百ものアドオンでNagiosを拡張</a></li>
 				<!--<li><a href="https://go.nagios.com/nagioscore/docs" target="_blank">Read the Nagios documentation</a></li>-->
-				<li><a href="https://go.nagios.com/nagioscore/support" target="_blank">Get support</a></li>
-				<li><a href="https://go.nagios.com/nagioscore/training" target="_blank">Get training</a></li>
-				<li><a href="https://go.nagios.com/nagioscore/certification" target="_blank">Get certified</a></li>
+				<li><a href="https://go.nagios.com/nagioscore/support" target="_blank">サポート</a></li>
+				<li><a href="https://go.nagios.com/nagioscore/training" target="_blank">トレーニング</a></li>
+				<li><a href="https://go.nagios.com/nagioscore/certification" target="_blank">認定</a></li>
 			</ul>
 		</div>
 
@@ -203,14 +203,14 @@ $this_year = '2024';
 		</div>
 
 		<div id="splashbox2" class="splashbox">
-			<h2>Quick Links</h2>
+			<h2>クイックリンク</h2>
 			<ul>
-				<li><a href="https://library.nagios.com" target="_blank">Nagios Library</a> (tutorials and docs)</li>
-				<li><a href="https://labs.nagios.com" target="_blank">Nagios Labs</a> (development blog)</li>
-				<li><a href="https://exchange.nagios.org" target="_blank">Nagios Exchange</a> (plugins and addons)</li>
-				<li><a href="https://support.nagios.com" target="_blank">Nagios Support</a> (tech support)</li>
-				<li><a href="https://www.nagios.com" target="_blank">Nagios.com</a> (company)</li>
-				<li><a href="https://www.nagios.org" target="_blank">Nagios.org</a> (project)</li>
+				<li><a href="https://library.nagios.com" target="_blank">Nagios Library</a> (チュートリアルとドキュメント)</li>
+				<li><a href="https://labs.nagios.com" target="_blank">Nagios Labs</a> (開発ブログ)</li>
+				<li><a href="https://exchange.nagios.org" target="_blank">Nagios Exchange</a> (プラグインとアドオン)</li>
+				<li><a href="https://support.nagios.com" target="_blank">Nagios Support</a> (テクニカルサポート)</li>
+				<li><a href="https://www.nagios.com" target="_blank">Nagios.com</a> (会社)</li>
+				<li><a href="https://www.nagios.org" target="_blank">Nagios.org</a> (プロジェクト)</li>
 			</ul>
 		</div>
 
@@ -221,13 +221,13 @@ $this_year = '2024';
 	<div id="splashrow2">
 
 		<div id="splashbox4" class="splashbox splashbox-clear"><!-- latest news feed -->
-			<h2>Latest News</h2>
+			<h2>新着ニュース</h2>
 			<div id="splashbox4-contents">
 			</div>
 		</div>
 
 		<div id="splashbox5" class="splashbox"><!-- core promo feed -->
-			<h2>Don't Miss...</h2>
+			<h2>お見逃しなく</h2>
 			<div id="splashbox5-contents">
 			</div>
 		</div>
